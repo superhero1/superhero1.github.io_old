@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Author: superhero1 ( Twitter: @_superhero1 )
 # Version: 1.0
-# Description: Get a sorted list of all TryHackMe rooms including points and if you have completed them
+# Description: Get a list of all TryHackMe rooms including points and if you have completed them
 # Prerequisites: run pip install thmapi
 # License: MIT
 
@@ -26,7 +26,7 @@ def get_points(room_info):
                 points += q['extraPoints']
     published_date = datetime.fromisoformat(room_info['published'].replace("Z", "+00:00"))
     monthly = 0
-    if this_month(published_date) == True and room_info['type'] == 'challenge':
+    if (this_month(published_date) == True and room_info['type'] == 'challenge') or (this_month(published_date) == True and room_info['type'] == 'walkthrough'):
         monthly = points
     elif this_month(published_date) == False and room_info['type'] == 'challenge':
         monthly = int(points / 30 * 8)
