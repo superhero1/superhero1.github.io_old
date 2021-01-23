@@ -69,8 +69,6 @@ def main():
             points = get_points(room_info)
             room = (room_info['code'], points[0], points[1], room_info['userCompleted'])
             rooms.append(room)
-            if (len(rooms) == 5):
-                break
             sleep(1)
 
         sort_by = 2 if args.monthly else 1
