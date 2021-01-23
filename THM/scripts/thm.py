@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: superhero1 ( Twitter: @_superhero1 )
-# Version: 1.1
+# Version: 1.11
 # Description: Get a list of all TryHackMe rooms including points and if you have completed them, leaderboard and current rank
 # Prerequisites: run pip install thmapi
 # License: MIT
@@ -50,10 +50,16 @@ def main():
             users.append((username, alltimePoints, monthlyPoints))
         
         sort_by = 2 if args.monthly else 1
-        reverse_me = False if args.asc else True
-        print('username alltime monthly')
+        reverse_me = False if args.desc else True #ranks need reversed logic
+        counter = 1 if reverse_me else len(users)
         for user in sorted(users, key=lambda x: x[sort_by], reverse=reverse_me):
-            print(user[0], user[1], user[2]) #this way it can be easily imported into sheets
+            if (args.numbered):
+                print('# username alltime monthly')
+                print(counter, user[0], user[1], user[2]) #this way it can be easily imported into sheets
+            else:
+                print('username alltime monthly')
+                print(user[0], user[1], user[2]) #this way it can be easily imported into sheets
+            counter = counter + 1 if reverse_me else counter - 1
     else:
         endpoint = '/api/hacktivities'
         hacktivities = http_get(t.session, endpoint)
@@ -63,21 +69,30 @@ def main():
             points = get_points(room_info)
             room = (room_info['code'], points[0], points[1], room_info['userCompleted'])
             rooms.append(room)
+            if (len(rooms) == 5):
+                break
             sleep(1)
 
         sort_by = 2 if args.monthly else 1
-        reverse_me = False if args.asc else True
-
+        reverse_me = True if args.desc else False
+        counter = 1
         print('roomcode alltime monthly completed')
         for room in sorted(rooms, key=lambda x: x[sort_by], reverse=reverse_me):
-            print(room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+            if (args.numbered):
+                print('# roomcode alltime monthly completed')
+                print(counter, room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+            else:
+                print('roomcode alltime monthly completed')
+                print(room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+            counter = counter + 1 #always count up
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--session", help="connect.sid", required=True)
 parser.add_argument("-m", "--monthly", action='store_true', help="Sort for monthly, alltime is default")
-parser.add_argument("-a", "--asc", action='store_true', help="Sort ascending, descending is default")
+parser.add_argument("-d", "--desc", action='store_true', help="Sort descending, ascending is default")
 parser.add_argument("-l", "--leaderboard", action='store_true', help="Query the leaderboard instead of rooms")
-parser.add_argument("-r", "--rank", action='store_true', help="Query the userrank")
+parser.add_argument("-r", "--rank", action='store_true', help="Query the userrank, ignores --leaderboard")
+parser.add_argument("-n", "--numbered", action='store_true', help="Add numbers to output")
 
 args = parser.parse_args()
 credentials = {}
