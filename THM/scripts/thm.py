@@ -52,12 +52,14 @@ def main():
         sort_by = 2 if args.monthly else 1
         reverse_me = False if args.desc else True #ranks need reversed logic
         counter = 1 if reverse_me else len(users)
+        if (args.numbered):
+                print('# username alltime monthly')
+        else:
+                print('username alltime monthly')
         for user in sorted(users, key=lambda x: x[sort_by], reverse=reverse_me):
             if (args.numbered):
-                print('# username alltime monthly')
                 print(counter, user[0], user[1], user[2]) #this way it can be easily imported into sheets
             else:
-                print('username alltime monthly')
                 print(user[0], user[1], user[2]) #this way it can be easily imported into sheets
             counter = counter + 1 if reverse_me else counter - 1
     else:
@@ -74,13 +76,14 @@ def main():
         sort_by = 2 if args.monthly else 1
         reverse_me = True if args.desc else False
         counter = 1
-        print('roomcode alltime monthly completed')
+        if (args.numbered):
+            print('# roomcode alltime monthly completed')
+        else:
+            print('roomcode alltime monthly completed')
         for room in sorted(rooms, key=lambda x: x[sort_by], reverse=reverse_me):
             if (args.numbered):
-                print('# roomcode alltime monthly completed')
                 print(counter, room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
             else:
-                print('roomcode alltime monthly completed')
                 print(room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
             counter = counter + 1 #always count up
 
