@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: superhero1 ( Twitter: @_superhero1 )
-# Version: 1.11
+# Version: 1.2
 # Description: Get a list of all TryHackMe rooms including points and if you have completed them, leaderboard and current rank
 # Prerequisites: run pip install thmapi
 # License: MIT
@@ -81,19 +81,23 @@ def main():
         else:
             print('roomcode alltime monthly completed')
         for room in sorted(rooms, key=lambda x: x[sort_by], reverse=reverse_me):
-            if (args.numbered):
-                print(counter, room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+            if (args.exclude and room[3] == True):
+                continue
             else:
-                print(room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
-            counter = counter + 1 #always count up
+                if (args.numbered):
+                    print(counter, room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+                else:
+                    print(room[0], room[1], room[2], room[3]) #this way it can be easily imported into sheets
+                counter = counter + 1 #always count up
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--session", help="connect.sid", required=True)
-parser.add_argument("-m", "--monthly", action='store_true', help="Sort for monthly, alltime is default")
 parser.add_argument("-d", "--desc", action='store_true', help="Sort descending, ascending is default")
+parser.add_argument("-e", "--exclude", action='store_true', help="exclude completed rooms from output")
 parser.add_argument("-l", "--leaderboard", action='store_true', help="Query the leaderboard instead of rooms")
-parser.add_argument("-r", "--rank", action='store_true', help="Query the userrank, ignores --leaderboard")
+parser.add_argument("-m", "--monthly", action='store_true', help="Sort for monthly, alltime is default")
 parser.add_argument("-n", "--numbered", action='store_true', help="Add numbers to output")
+parser.add_argument("-r", "--rank", action='store_true', help="Query the userrank, ignores --leaderboard")
 
 args = parser.parse_args()
 credentials = {}
