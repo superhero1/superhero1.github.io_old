@@ -1,4 +1,4 @@
-# [HERO] HeroPool
+# [[HERO] HeroPool](https://adastat.net/pools/c7aa65ce5417d3b667c3661a5364cdf5101359b81323c3ef8ca555d5)
 ## Cardano (ADA) staking pool - by superhero1
 
 ## Tutorial
