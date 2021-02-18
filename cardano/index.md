@@ -76,7 +76,7 @@ cardano-cli transaction submit \
 --mainnet
 ```
 
-## Generate stake pool keys [OFFLINE!]
+### Generate stake pool keys [OFFLINE!]
 ```
 mkdir pool-keys
 cd pool-keys
