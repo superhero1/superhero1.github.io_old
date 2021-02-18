@@ -174,6 +174,17 @@ cardano-cli stake-address delegation-certificate \
 
 Transfer kes.skey, vrf.skey and node.cert to the core / block producer node
 
+### Start the relay node
+```
+cardano-node run \
+   --topology /home/cardano/mainnet-topology.json \
+   --database-path /home/cardano/db \
+   --socket-path /home/cardano/db/node.socket \
+   --host-addr 0.0.0.0 \
+   --port 3000 \
+   --config /home/cardano/mainnet-config.json
+```
+
 ### Start the core / block producer node
 ```
 cardano-node run \
