@@ -52,7 +52,7 @@ echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
 go get -u github.com/ffuf/ffuf > /dev/null
 # wpscan
 gem install wpscan > /dev/null
-wpscan --no-banner --update
+wpscan --no-banner --update > /dev/null
 # sqlmap
 pip3 install sqlmap > /dev/null
 # stegseek
