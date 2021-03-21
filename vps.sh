@@ -257,6 +257,8 @@ added() {
 main() {
     SECONDS=0
     while [[ $SECONDS -lt 5 ]] || [[ ! -z $LOCK ]]; do 
+	    echo -e "${RED}[!] If no options is chosen in the next 5 seconds"
+	    echo -e "${RED}[!] this script will automatically execute!"
 	    read -t 6 -p "$(echo -e "${GREEN}[+] Do you want customise package selection? (Y/N) ${NOCOLOR}") " yn
         case "$yn" in
             [yY]*)
