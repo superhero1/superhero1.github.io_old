@@ -94,6 +94,7 @@ wget https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
+echo
 echo -e "To use go tools like ffuf please run: ${RED}source ~/bash.rc${NOCOLOR}"
 echo
 echo -e "To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
