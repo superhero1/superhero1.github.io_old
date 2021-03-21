@@ -87,7 +87,7 @@ wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/la
 echo -e "${GREEN}Grabbing wordlists...${NOCOLOR}"
 echo
 # seclists to /usr/share/seclists
-wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip
+wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip > /dev/null
 rm -f SecList.zip
 mv SecLists-master/ /usr/share/seclists/
 # Pull rockyou.txt to /usr/share/wordlists/
