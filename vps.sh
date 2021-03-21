@@ -254,18 +254,70 @@ added() {
     done; valid
 }
 
-root_check
-hostname
-packages
-added
+main() {
+    SECONDS=0
+    while [[ $SECONDS -lt 5 ]] || [[ ! -z $LOCK ]]; do 
+	    read -t 6 -p "$(echo -e "${GREEN}[+] Do you want customise package selection? (Y/N) ${NOCOLOR}") " yn
+        case "$yn" in
+            [yY]*)
+                LOCK="1"
+                root_check
+                hostname
+                packages
+                added
+		echo -e "${GREEN}[+] Done! :)${NOCOLOR}"
+                echo -e "${GREEN}To use go tools like ffuf please run: ${RED}source ~/.bashrc${NOCOLOR}"
+                echo -e "${GREEN}To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
+                echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
+                # EOF
+		SECONDS=0
+                break
+                ;;
+            [nN]*)
+                break
+                ;;
+        esac
+    done 
+    if [[ $SECONDS -gt 5 ]]; then
+	sleep 2
+        hostname heroVPS
+        hostnamectl set-hostname heroVPS
+        echo -e "${GREEN}Updating package lists...${NOCOLOR}"
+        apt-get update -qq > /dev/null
+        echo -e "${GREEN}Installing basic tools...${NOCOLOR}"
+        echo
+        apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
+        echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
+        go get -u github.com/ffuf/ffuf > /dev/null
+        gem install wpscan > /dev/null
+        wpscan --no-banner --update > /dev/null
+        pip3 install sqlmap > /dev/null
+        wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb > /dev/null && rm stegseek.deb
+        echo -e "${GREEN}Grabbing wordlists...${NOCOLOR}"
+        wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip > /dev/null
+        rm -f SecList.zip
+        mv SecLists-master/ /usr/share/seclists/
+        mkdir /usr/share/wordlists
+        wget -q https://download.weakpass.com/wordlists/90/rockyou.txt.gz && gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
+        echo -e "${GREEN}Grabbing static binaries...${NOCOLOR}"
+        mkdir -p ~/web/static
+        wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux64" | sort -ur | head -n1) -O ~/web/static/nmap.zip
+        wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
+        wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip ~/web/static/chisel.gz && chmod +x ~/web/static/chisel
+        wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_NC -O ~/web/static/nc && chmod +x ~/web/static/nc
+        wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O ~/web/static/socat && chmod +x ~/web/static/socat
+        wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_WGET -O ~/web/static/wget && chmod +x ~/web/static/wget
+        wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O ~/web/revshell.php
+        sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
+        echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
+        mkdir ~/scripts
+        wget -q https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
+        echo -e "${GREEN}[+] Done! :)${NOCOLOR}"
+        echo -e "${GREEN}To use go tools like ffuf please run: ${RED}source ~/.bashrc${NOCOLOR}"
+        echo -e "${GREEN}To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
+        echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
+        # EOF
+    fi
+}
 
-echo
-echo
-echo -e "${GREEN}Done! :)${NOCOLOR}"
-echo
-echo -e "To use go tools like ffuf please run: ${RED}source ~/.bashrc${NOCOLOR}"
-echo
-echo -e "To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
-echo
-echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
-# EOF
+main
