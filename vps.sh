@@ -25,9 +25,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ################################################################################
-export RED="\033[1;31m"
-export GREEN="\033[1;32m"
-export NOCOLOR="\033[0m"
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NOCOLOR="\033[0m"
 echo
 echo "${RED}This script should always run as root${NOCOLOR}"
 echo
