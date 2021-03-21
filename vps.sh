@@ -29,9 +29,31 @@ RED="\033[1;31m"
 YELLOW="\033[1;33m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
-echo
-echo -e "${RED}This script should always run as root${NOCOLOR}"
-echo
+export NEWT_COLORS='
+    root=white,black
+    border=black,lightgray
+    window=lightgray,lightgray
+    shadow=black,gray
+    title=black,lightgray
+    button=black,cyan
+    actbutton=white,cyan
+    compactbutton=black,lightgray
+    checkbox=black,lightgray
+    actcheckbox=lightgray,cyan
+    entry=black,lightgray
+    disentry=gray,lightgray
+    label=black,lightgray
+    listbox=black,lightgray
+    actlistbox=black,cyan
+    sellistbox=lightgray,black
+    actsellistbox=lightgray,black
+    textbox=black,lightgray
+    acttextbox=black,cyan
+    emptyscale=,gray
+    fullscale=,cyan
+    helpline=white,black
+    roottext=lightgrey,black
+'
 echo -e "${YELLOW}                                    .      "
 echo -e "                                  .cxo'    "
 echo -e "              ....'',,,,,''...',:okOOOk:.  "
@@ -59,66 +81,184 @@ echo -e " 'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOO0OOOOxl'   "
 echo -e " .,:::::::::::::::::::::::::::::::;,..     ${NOCOLOR}"
 echo
 echo
-# Change hostname (not really needed)
-hostname heroVPS
-hostnamectl set-hostname heroVPS
-# Update the package list and install latest updates
-echo -e "${GREEN}Updating package lists...${NOCOLOR}"
-echo
-apt-get update -qq > /dev/null
-# Install additional packages we always need
-# hydra, john, nikto etc
-echo -e "${GREEN}Installing basic tools...${NOCOLOR}"
-echo
-apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
-# Add go bin to PATH variable
-echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
-# Install single tools
-# ffuf
-go get -u github.com/ffuf/ffuf > /dev/null
-# wpscan
-gem install wpscan > /dev/null
-wpscan --no-banner --update > /dev/null
-# sqlmap
-pip3 install sqlmap > /dev/null
-# stegseek
-wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb > /dev/null && rm stegseek.deb
-# Install additional resources
-echo -e "${GREEN}Grabbing wordlists...${NOCOLOR}"
-echo
-# seclists to /usr/share/seclists
-wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip > /dev/null
-rm -f SecList.zip
-mv SecLists-master/ /usr/share/seclists/
-# Pull rockyou.txt to /usr/share/wordlists/
-mkdir /usr/share/wordlists
-wget -q https://download.weakpass.com/wordlists/90/rockyou.txt.gz && gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
-# Get some static binaries and put them into ~/web/static
-echo -e "${GREEN}Grabbing static binaries...${NOCOLOR}"
-echo
-mkdir -p ~/web/static
-# nmap
-wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux64" | sort -ur | head -n1) -O ~/web/static/nmap.zip
-# unzip
-wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
-# chisel
-wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip ~/web/static/chisel.gz && chmod +x ~/web/static/chisel
-# nc
-wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_NC -O ~/web/static/nc && chmod +x ~/web/static/nc
-# socat
-wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O ~/web/static/socat && chmod +x ~/web/static/socat
-# wget
-wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_WGET -O ~/web/static/wget && chmod +x ~/web/static/wget
-# get pentestmonkey php reverse shell
-wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O ~/web/revshell.php
-# replace IP with our VPS IP
-sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
-# Install useful scripts
-echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
-echo
-mkdir ~/scripts
-# SimpleHttpServerWithUpload.py
-wget -q https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
+
+valid(){
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}[+] Command Completed${NOCOLOR}"
+    else
+        echo -e "${RED}[-] Command failed${NOCOLOR}"
+    fi
+}
+
+progress(){
+    while :;do for s in / - \\ \|; do printf "\r$s";sleep 0.2;done;done &
+    $i # or do something else here
+    kill $!; trap 'kill $!' SIGTERM
+    echo done
+}
+
+root_check(){
+    if [[ $EUDI -ne 0 ]]; then
+        echo -e "${RED}[-] This script must be run as root${NOCOLOR}"
+        exit 1
+    fi
+}
+
+hostname() {
+    while true; do
+        read -p "$(echo -e "${GREEN}[+] Do you want to set the host information? ${NOCOLOR}") " yn
+        case "$yn" in
+	    [yY]*)
+                read -p "$(echo -e "${GREEN}[+] Enter hostname: ${NOCOLOR}")" HOSTNAME
+                while [ -z "${HOSTNAME}" ]; do 
+	            read -p "$( echo -e "${RED}[-] Hostname was not set, please enter hostname: ${NOCOLOR}")" HOSTNAME
+                done
+                # Change hostname (not really needed)
+                hostname "${HOSTNAME}"; valid
+                hostnamectl set-hostname "${HOSTNAME}"; valid
+		break
+		;;
+            [nN]*)
+                echo -e "${RED}[-] No hostname configuration set ${NOCOLOR}"
+		break
+                ;;
+	    *)
+		echo -e "${RED}[-] Invalid response${NOCOLOR}"
+	esac
+done
+}
+
+packages() {
+    # Update the package list and install latest updates
+    echo -e "${GREEN}[+] Updating package lists...${NOCOLOR}"    
+    apt-get update -qq > /dev/null
+    echo -e "${GREEN}[+] Installing prerequisite packages...${NOCOLOR}"
+    apt-get install -qq -y nmap golang python3-pip unzip jq ruby ruby-dev libjpeg62 > /dev/null
+    # Add go bin to PATH variable
+    echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
+    cmd=(whiptail --title "Install Packages: " --checklist "Choose:" 20 78 15)
+    options=(1 "ffuf" off    # any option can be set to default to "on"
+             2 "wpscan" off
+             3 "john" off
+             4 "hydra" off
+             5 "nikto" off
+             6 "steghide" off	
+	     7 "sqlmap" off
+	     8 "stegseek" off)
+    choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    for choice in $choices;
+    do
+        case $choice in
+	    1)
+                echo "Installing ffuf"
+		go get -u github.com/ffuf/ffuf > /dev/null
+                ;;
+            2)
+                echo "Installing wpscan"
+		gem install wpscan > /dev/null
+                wpscan --no-banner --update > /dev/null
+                ;;
+            3)
+                echo "Installing john"
+		apt-get install -qq -y john > /dev/null 
+                ;;
+            4)
+                echo "Installing hydra"
+		apt-get install -qq -y hydra-gtk > /dev/null
+                ;;
+            5) 
+                echo "Installing nikto"
+		apt-get install -qq -y nikto > /dev/null
+		;;
+            6)
+                echo "Installing steghide"
+		apt-get install -qq -y steghide > /dev/null
+		;;
+            7)
+                echo "Installing sqlmap"
+		pip3 install sqlmap > /dev/null
+		;;
+            8)
+                echo "Installing stegseek"
+		wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb > /dev/null && rm stegseek.deb
+		;;
+        esac
+    done; valid
+}
+
+added() {    
+    # Install additional resources
+    echo -e "${GREEN}[+] Install additional resources${NOCOLOR}"
+    echo
+    cmd=(whiptail --title "Additional Resources: " --checklist "Choose:" 20 78 15)
+    options=(1 "SecList Wordlist" off    # any option can be set to default to "on"
+             2 "RockYou Wordlist" off
+             3 "Nmap static" off
+             4 "unzip static" off
+	     5 "chisel static" off
+	     6 "netcat static" off
+	     7 "socat static" off
+	     8 "wget static" off
+             9 "Pentest PHP shell" off
+	     10 "HTTP server w/upload" off)
+    choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    echo -e "${GREEN}[+] Preparing for static binaries${NOCOLOR}"
+    echo
+    mkdir -p ~/web/static
+    # Install useful scripts
+    echo -e "${GREEN}[+] Preparing to grab useful scripts${NOCOLOR}"
+    echo
+    for choice in $choices
+    do
+        case $choice in
+            1)
+                wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip > /dev/null
+                rm -f SecList.zip
+                mkdir /usr/share/seclists/
+    		mv SecLists-master/ /usr/share/seclists/
+                ;;
+            2)  
+                wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip > /dev/null
+                rm -f SecList.zip
+                mv SecLists-master/ /usr/share/seclists/
+                ;;
+            3)
+                wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux64" | sort -ur | head -n1) -O ~/web/static/nmap.zip
+                ;;
+            4)
+                wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
+                ;;
+            5)
+                wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip ~/web/static/chisel.gz && chmod +x ~/web/static/chisel
+	        ;;
+	    6)
+                wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_NC -O ~/web/static/nc && chmod +x ~/web/static/nc
+                ;;
+            7)
+                wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O ~/web/static/socat && chmod +x ~/web/static/socat
+                ;;
+            8)
+                wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_WGET -O ~/web/static/wget && chmod +x ~/web/static/wget
+                ;;
+            9)
+                wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O ~/web/revshell.php
+    # replace IP with our VPS IP
+    sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
+                ;;
+            10)
+                mkdir ~/scripts
+                # SimpleHttpServerWithUpload.py
+                wget -q https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
+                ;;
+        esac
+    done; valid
+}
+
+root_check
+hostname
+packages
+added
+
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
