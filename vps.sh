@@ -49,12 +49,12 @@ apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto rub
 echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
 # Install single tools
 # ffuf
-go get -u github.com/ffuf/ffuf
+go get -u github.com/ffuf/ffuf > /dev/null
 # wpscan
 gem install wpscan > /dev/null
 wpscan --no-banner --update
 # sqlmap
-pip3 install sqlmap
+pip3 install sqlmap > /dev/null
 # stegseek
 wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb && rm stegseek.deb
 # Install additional resources
