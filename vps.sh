@@ -11,7 +11,6 @@ hostname heroVPS
 hostnamectl set-hostname heroVPS
 # Update the package list and install latest updates
 apt update
-#DEBIAN_FRONTEND=noninteractive apt upgrade -yq
 # Install additional packages we always need
 # hydra, john, nikto etc
 apt install -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62
@@ -57,5 +56,9 @@ wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master
 sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
 # SimpleHttpServerWithUpload.py
 echo
+echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
+echo
+echo "If you like you can upgrade existing packages to their latest version running: apt upgrade"
+echo
 echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
