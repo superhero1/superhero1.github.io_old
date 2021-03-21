@@ -26,10 +26,38 @@
 # SOFTWARE.
 ################################################################################
 RED="\033[1;31m"
+YELLOW="\033[1;33m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
 echo
 echo -e "${RED}This script should always run as root${NOCOLOR}"
+echo
+echo -e "${YELLOW}                                    .      "
+echo -e "                                  .cxo'    "
+echo -e "              ....'',,,,,''...',:okOOOk:.  "
+echo -e "         .';loxkkOOOOOOOOOOOOOOOOOOOOOOk,  "
+echo -e "       .:dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOc  "
+echo -e "     .:kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOc  "
+echo -e "     'okOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0O;  "
+echo -e "    .:xOOOkdlllodkOOOOOOOOOOkxollloxOOOkdc."
+echo -e "    cOOOd;.     ..';codddl:,..     .,oOO0d."
+echo -e "   'xOOl.             ...            .:k0o."
+echo -e "   ;OOkl:llllollooolllooooollllllolloodk0l."
+echo -e "   :OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOc "
+echo -e "  'xOOOOO0OOOOOOOOOOOOOOOOOOOOO0OOOO0OOOO: "
+echo -e " .oOOOOOkl:,;:cldkOOOOOOOOOOkdlc:;,;lkOOO; "
+echo -e " .xOOOOOc.       .,lkOOOOOo;.       .lOOk, "
+echo -e " .d0OOOOkl::;;;::cldOOOOOOkdlc:;,',;lkOOk, "
+echo -e "  ;kOOOOOOO0OO0OOOOOOOOOOOOOOOOOOOOOOOO0x' "
+echo -e "   .lk0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd. "
+echo -e "     .,clodddddddddddddddddddddxOOOOOOOOO: "
+echo -e "                               .:kOOOOOO0d."
+echo -e "                               .:kOOOOOO0x'"
+echo -e " .ldddddooddoodddddddddddddddddxkOOOOOOOOo."
+echo -e " .xOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0kl. "
+echo -e " 'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOO0OOOOxl'   "
+echo -e " .,:::::::::::::::::::::::::::::::;,..     ${NOCOLOR}"
+echo
 echo
 # Change hostname (not really needed)
 hostname heroVPS
@@ -90,7 +118,7 @@ echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
 echo
 mkdir ~/scripts
 # SimpleHttpServerWithUpload.py
-wget https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
+wget -q https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
