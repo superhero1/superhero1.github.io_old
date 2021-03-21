@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | bash
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh && chmod +x vps.sh && . ./vps.sh
 #
 # MIT License
 # 
@@ -38,7 +38,10 @@ hostnamectl set-hostname heroVPS
 apt update
 # Install additional packages we always need
 # hydra, john, nikto etc
-apt install -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62
+echo
+echo "${GREEN}Installing basic tools...${NOCOLOR}"
+echo
+apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
 # Add go bin to PATH variable
 echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
@@ -53,15 +56,20 @@ pip3 install sqlmap
 # stegseek
 wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb && rm stegseek.deb
 # Install additional resources
+echo
+echo "${GREEN}Grabbing wordlists...${NOCOLOR}"
+echo
 # seclists to /usr/share/seclists
-wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip
+wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip
 rm -f SecList.zip
 mv SecLists-master/ /usr/share/seclists/
 # Pull rockyou.txt to /usr/share/wordlists/
 mkdir /usr/share/wordlists
-wget https://download.weakpass.com/wordlists/90/rockyou.txt.gz
-gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
+wget -q https://download.weakpass.com/wordlists/90/rockyou.txt.gz && gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
 # Get some static binaries and put them into ~/web/static
+echo
+echo "${GREEN}Grabbing static binaries...${NOCOLOR}"
+echo
 mkdir -p ~/web/static
 # nmap
 wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux64" | sort -ur | head -n1) -O ~/web/static/nmap.zip
