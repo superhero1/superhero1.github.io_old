@@ -67,7 +67,7 @@ wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/lat
 # unzip
 wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
 # chisel
-wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip chisel.gz && chmod +x ~/web/static/chisel
+wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip ~/web/static/chisel.gz && chmod +x ~/web/static/chisel
 # nc
 wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_NC -O ~/web/static/nc && chmod +x ~/web/static/nc
 # socat
