@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | bash
 #
 # MIT License
 # 
