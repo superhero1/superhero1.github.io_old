@@ -98,14 +98,15 @@ progress(){
 }
 
 root_check(){
-    if [[ $EUDI -ne 0 ]]; then
+    if [[ $EUID -ne 0 ]]; then
         echo -e "${RED}[-] This script must be run as root${NOCOLOR}"
         exit 1
     fi
 }
 
-hostname() {
+hostname_config() {
     while true; do
+        echo
         read -p "$(echo -e "${GREEN}[+] Do you want to set the host information? ${NOCOLOR}") " yn
         case "$yn" in
 	    [yY]*)
@@ -255,16 +256,16 @@ added() {
 }
 
 main() {
+    echo -e "${RED}[!] If no options is chosen in the next 3 seconds"
+    echo -e "${RED}[!] this script will automatically execute!"
     SECONDS=0
-    while [[ $SECONDS -lt 5 ]] || [[ ! -z $LOCK ]]; do 
-	    echo -e "${RED}[!] If no options is chosen in the next 5 seconds"
-	    echo -e "${RED}[!] this script will automatically execute!"
-	    read -t 6 -p "$(echo -e "${GREEN}[+] Do you want customise package selection? (Y/N) ${NOCOLOR}") " yn
-        case "$yn" in
-            [yY]*)
+    while [[ $SECONDS -lt 3 ]] || [[ ! -z $LOCK ]]; do 
+	read -t 4 -p "$(echo -e "${GREEN}[+] Press any key to configure packages ${NOCOLOR}")" key_press
+        case "$key_press" in
+            [a-z0-9A-Z])
                 LOCK="1"
                 root_check
-                hostname
+                hostname_config
                 packages
                 added
 		echo -e "${GREEN}[+] Done! :)${NOCOLOR}"
@@ -275,14 +276,12 @@ main() {
 		SECONDS=0
                 break
                 ;;
-            [nN]*)
-                break
-                ;;
         esac
     done 
-    if [[ $SECONDS -gt 5 ]]; then
-	sleep 2
-        hostname heroVPS
+    echo $SECONDS
+    if [[ $SECONDS -gt 3 ]]; then
+	root_check
+	hostname heroVPS
         hostnamectl set-hostname heroVPS
         echo -e "${GREEN}Updating package lists...${NOCOLOR}"
         apt-get update -qq > /dev/null
