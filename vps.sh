@@ -1,6 +1,33 @@
 #!/bin/bash
+# Author: superhero1
+# Twitter: @_superhero1
+# License:
+# MIT License
+# 
+# Copyright (c) [year] [fullname]
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+#
 # Install command:
 # curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
+################################################################################
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
@@ -43,7 +70,7 @@ wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/lat
 # unzip
 wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
 # chisel
- wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip chisel.gz && chmod +x ~/web/static/chisel
+wget -q $(curl -sL https://api.github.com/repos/jpillora/chisel/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux_amd64") -O ~/web/static/chisel.gz && gunzip chisel.gz && chmod +x ~/web/static/chisel
 # nc
 wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_NC -O ~/web/static/nc && chmod +x ~/web/static/nc
 # socat
@@ -62,3 +89,4 @@ echo
 echo "If you like you can upgrade existing packages to their latest version running: apt upgrade"
 echo
 echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
+# EOF
