@@ -29,20 +29,20 @@ RED="\033[1;31m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
 echo
-echo "${RED}This script should always run as root${NOCOLOR}"
+echo -e "${RED}This script should always run as root${NOCOLOR}"
 echo
 # Change hostname (not really needed)
 hostname heroVPS
 hostnamectl set-hostname heroVPS
 # Update the package list and install latest updates
 echo
-echo "${GREEN}Updating package lists...${NOCOLOR}"
+echo -e "${GREEN}Updating package lists...${NOCOLOR}"
 echo
 apt-get update -qq > /dev/null
 # Install additional packages we always need
 # hydra, john, nikto etc
 echo
-echo "${GREEN}Installing basic tools...${NOCOLOR}"
+echo -e "${GREEN}Installing basic tools...${NOCOLOR}"
 echo
 apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
 # Add go bin to PATH variable
@@ -52,14 +52,14 @@ echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
 go get -u github.com/ffuf/ffuf > /dev/null
 # wpscan
 gem install wpscan > /dev/null
-wpscan --no-banner --update > /dev/null
+wpscan --no-banner --update
 # sqlmap
 pip3 install sqlmap > /dev/null
 # stegseek
 wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb && rm stegseek.deb
 # Install additional resources
 echo
-echo "${GREEN}Grabbing wordlists...${NOCOLOR}"
+echo -e "${GREEN}Grabbing wordlists...${NOCOLOR}"
 echo
 # seclists to /usr/share/seclists
 wget -q https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip
@@ -70,7 +70,7 @@ mkdir /usr/share/wordlists
 wget -q https://download.weakpass.com/wordlists/90/rockyou.txt.gz && gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
 # Get some static binaries and put them into ~/web/static
 echo
-echo "${GREEN}Grabbing static binaries...${NOCOLOR}"
+echo -e "${GREEN}Grabbing static binaries...${NOCOLOR}"
 echo
 mkdir -p ~/web/static
 # nmap
@@ -91,7 +91,7 @@ wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master
 sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
 # Install nice scripts
 echo
-echo "${GREEN}Grabbing useful scripts...${NOCOLOR}"
+echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
 echo
 mkdir ~/scripts
 # SimpleHttpServerWithUpload.py
