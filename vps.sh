@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Install command:
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
+#
 # MIT License
 # 
 # Copyright (c) 2021 superhero1 (Twitter: @_superhero1)
@@ -20,10 +24,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
-#
-# Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
 ################################################################################
 RED="\033[1;31m"
 GREEN="\033[1;32m"
