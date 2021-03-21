@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | bash
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
 #
 # MIT License
 # 
@@ -44,7 +44,6 @@ echo
 apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
 # Add go bin to PATH variable
 echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
-source ~/.bashrc
 # Install single tools
 # ffuf
 go get -u github.com/ffuf/ffuf
