@@ -95,7 +95,7 @@ echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
 echo
 mkdir ~/scripts
 # SimpleHttpServerWithUpload.py
-wget https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
+wget -q https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
