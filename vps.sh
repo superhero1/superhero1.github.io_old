@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh && chmod +x vps.sh && . ./vps.sh
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | bash
 #
 # MIT License
 # 
@@ -91,8 +91,9 @@ sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.p
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
+echo -e "${GREEN}To use go tools like ffuf please run: ${RED}source ~/bash.rc${NOCOLOR}"
 echo
-echo "If you like you can upgrade existing packages to their latest version running: apt upgrade"
+echo -e "${GREEN}To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
 echo
 echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
 # EOF
