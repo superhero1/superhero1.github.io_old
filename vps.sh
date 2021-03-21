@@ -123,7 +123,7 @@ echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
 echo
-echo -e "To use go tools like ffuf please run: ${RED}source ~/bash.rc${NOCOLOR}"
+echo -e "To use go tools like ffuf please run: ${RED}source ~/.bashrc${NOCOLOR}"
 echo
 echo -e "To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
 echo
