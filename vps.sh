@@ -25,6 +25,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ################################################################################
+set -e
 RED="\033[1;31m"
 YELLOW="\033[1;33m"
 GREEN="\033[1;32m"
@@ -262,7 +263,7 @@ main() {
     while [[ $SECONDS -lt 3 ]] || [[ ! -z $LOCK ]]; do 
 	read -t 4 -p "$(echo -e "${GREEN}[+] Press any key to configure packages ${NOCOLOR}")" key_press
         case "$key_press" in
-            [a-z0-9A-Z])
+            *)
                 LOCK="1"
                 root_check
                 hostname_config
