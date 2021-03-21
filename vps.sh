@@ -35,13 +35,11 @@ echo
 hostname heroVPS
 hostnamectl set-hostname heroVPS
 # Update the package list and install latest updates
-echo
 echo -e "${GREEN}Updating package lists...${NOCOLOR}"
 echo
 apt-get update -qq > /dev/null
 # Install additional packages we always need
 # hydra, john, nikto etc
-echo
 echo -e "${GREEN}Installing basic tools...${NOCOLOR}"
 echo
 apt-get install -qq -y golang python3-pip unzip nmap jq hydra-gtk john nikto ruby ruby-dev steghide libjpeg62 > /dev/null
@@ -56,9 +54,8 @@ wpscan --no-banner --update > /dev/null
 # sqlmap
 pip3 install sqlmap > /dev/null
 # stegseek
-wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb && rm stegseek.deb
+wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb > /dev/null && rm stegseek.deb
 # Install additional resources
-echo
 echo -e "${GREEN}Grabbing wordlists...${NOCOLOR}"
 echo
 # seclists to /usr/share/seclists
@@ -69,7 +66,6 @@ mv SecLists-master/ /usr/share/seclists/
 mkdir /usr/share/wordlists
 wget -q https://download.weakpass.com/wordlists/90/rockyou.txt.gz && gunzip rockyou.txt.gz && mv rockyou.txt /usr/share/wordlists/
 # Get some static binaries and put them into ~/web/static
-echo
 echo -e "${GREEN}Grabbing static binaries...${NOCOLOR}"
 echo
 mkdir -p ~/web/static
@@ -89,8 +85,7 @@ wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_WGET -
 wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O ~/web/revshell.php
 # replace IP with our VPS IP
 sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
-# Install nice scripts
-echo
+# Install useful scripts
 echo -e "${GREEN}Grabbing useful scripts...${NOCOLOR}"
 echo
 mkdir ~/scripts
@@ -99,9 +94,9 @@ wget https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
-echo -e "${GREEN}To use go tools like ffuf please run: ${RED}source ~/bash.rc${NOCOLOR}"
+echo -e "To use go tools like ffuf please run: ${RED}source ~/bash.rc${NOCOLOR}"
 echo
-echo -e "${GREEN}To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
+echo -e "To upgrade existing packages run (optional): ${RED}apt upgrade${NOCOLOR}"
 echo
 echo -e "${RED}If you like this script feel free to contribute or donate at https://ko-fi.com/superhero1${NOCOLOR}"
 # EOF
