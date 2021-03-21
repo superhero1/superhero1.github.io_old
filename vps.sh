@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# Install command:
-# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | sh
-#
 # MIT License
 # 
 # Copyright (c) 2021 superhero1 (Twitter: @_superhero1)
@@ -24,12 +20,17 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+#
+#
+# Install command:
+# curl --proto '=https' --tlsv1.2 -sSf https://superhero1.com/vps.sh | bash
 ################################################################################
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
 echo
-echo "This script should always run as root"
+echo "${RED}This script should always run as root${NOCOLOR}"
+echo
 # Change hostname (not really needed)
 hostname heroVPS
 hostnamectl set-hostname heroVPS
