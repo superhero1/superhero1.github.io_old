@@ -38,7 +38,7 @@ hostnamectl set-hostname heroVPS
 echo
 echo "${GREEN}Updating package lists...${NOCOLOR}"
 echo
-apt update -qq > /dev/null
+apt-get update -qq > /dev/null
 # Install additional packages we always need
 # hydra, john, nikto etc
 echo
@@ -51,7 +51,7 @@ echo "export PATH=$HOME/go/bin:$PATH" >> ~/.bashrc
 # ffuf
 go get -u github.com/ffuf/ffuf
 # wpscan
-gem install wpscan
+gem install wpscan > /dev/null
 wpscan --no-banner --update
 # sqlmap
 pip3 install sqlmap
@@ -89,7 +89,13 @@ wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_WGET -
 wget -q https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O ~/web/revshell.php
 # replace IP with our VPS IP
 sed -i 's,^\($ip[ ]*=\).*,\1\ \"'`curl -sL ipconfig.me`\"\;',g' ~/web/revshell.php
+# Install nice scripts
+echo
+echo "${GREEN}Grabbing useful scripts...${NOCOLOR}"
+echo
+mkdir ~/scripts
 # SimpleHttpServerWithUpload.py
+wget https://gist.githubusercontent.com/smidgedy/1986e52bb33af829383eb858cb38775c/raw/3e6ccace73bbd9f1bb0a7a40ffeb456b096655f5/SimpleHTTPServerWithUpload.py -O ~/scripts/SimpleHTTPServerWithUpload.py
 echo
 echo
 echo -e "${GREEN}Done! :)${NOCOLOR}"
