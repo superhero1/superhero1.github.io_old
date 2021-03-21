@@ -1,10 +1,7 @@
 #!/bin/bash
-# Author: superhero1
-# Twitter: @_superhero1
-# License:
 # MIT License
 # 
-# Copyright (c) 2021 superhero1
+# Copyright (c) 2021 superhero1 (Twitter: @_superhero1)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -56,7 +53,7 @@ pip3 install sqlmap
 wget -q $(curl -sL https://api.github.com/repos/RickdeJager/stegseek/releases/latest | jq -r '.assets[].browser_download_url') -O stegseek.deb && dpkg -i stegseek.deb && rm stegseek.deb
 # Install additional resources
 # seclists to /usr/share/seclists
-wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -o SecList.zip
+wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip && unzip -qqo SecList.zip
 rm -f SecList.zip
 mv SecLists-master/ /usr/share/seclists/
 # Pull rockyou.txt to /usr/share/wordlists/
