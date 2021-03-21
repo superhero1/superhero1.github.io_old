@@ -35,7 +35,10 @@ echo
 hostname heroVPS
 hostnamectl set-hostname heroVPS
 # Update the package list and install latest updates
-apt update
+echo
+echo "${GREEN}Updating package lists...${NOCOLOR}"
+echo
+apt update -qq > /dev/null
 # Install additional packages we always need
 # hydra, john, nikto etc
 echo
