@@ -98,7 +98,7 @@ echo -e "${GREEN}Grabbing static binaries...${NOCOLOR}"
 echo
 mkdir -p ~/web/static
 # nmap
-wget -q $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases/latest | jq -r '.assets[].browser_download_url' | grep "linux64" | sort -ur | head -n1) -O ~/web/static/nmap.zip
+wget -q $(curl -sL $(curl -sL https://api.github.com/repos/ernw/static-toolbox/releases | jq -r '.[].url' | head -n1) | jq -r '.assets[].browser_download_url' | grep "x86_64" | grep "zip") -O ~/web/static/nmap.zip
 # unzip
 wget -q https://busybox.net/downloads/binaries/1.31.0-i686-uclibc/busybox_UNZIP -O ~/web/static/unzip && chmod +x ~/web/static/unzip
 # chisel
